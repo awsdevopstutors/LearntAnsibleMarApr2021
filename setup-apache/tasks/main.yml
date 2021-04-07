@@ -1,0 +1,40 @@
+---
+# tasks file for setup-apache
+- name: Install httpd package on Redhat servers
+  yum:
+    name: httpd
+    state: present
+  when: ansible_os_family == "RedHat"
+  notify: start httpd
+
+- name: install apache2 on Debaian Server
+  apt:
+    name: apache2
+    state: present
+  when: ansible_os_family == "Debian"
+  notify: start apache2
+
+- name: Ensure default httpd  port  is {{ port }} on Redhat and AmazonManaged
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '^Listen '
+    insertafter: '^#Listen '
+    line: Listen {{ port }}
+  when: ansible_os_family == "RedHat"
+  notify: restart httpd
+
+- name: Ensure default apache port is {{ port }} on Debian server
+  lineinfile:
+    path: /etc/apache2/ports.conf
+    regexp: '^Listen '
+    insertafter: '# /etc/apache2/sites-enabled/000-default.conf'
+    line: Listen {{ port }}
+  when: ansible_os_family == "Debian"
+  notify: restart apache2
+
+- name: Copy index.html to Redhat and Debian systems
+  copy:
+   src: /opt/ansible/index.html
+   dest: /var/www/html
+   mode: 0666
+

@@ -1,0 +1,18 @@
+---
+- name: Playbook to install and start  httpd service packages
+  hosts: webservers
+  become: true
+  #gather_facts: no
+  tasks:
+  - name: Install httpd package
+    yum: 
+      name: httpd
+      state: present
+    notify: Start httpd service
+  
+  handlers:  
+  - name: Start httpd service
+    service:
+      name: httpd
+      state: started
+

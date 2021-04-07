@@ -1,0 +1,37 @@
+---
+- name: Setup Tomact 
+  hosts: all
+  become: true
+  tasks:
+  - name:  Install Java on REDHAT system
+    yum: 
+      name: java
+      state: installed
+    when: ansible_os_family == "RedHat"
+    
+  - name: Step2 - Install Java on UBUNTU System.
+    apt:
+      name: default-jdk
+      state: present
+    when: ansible_os_family == "Debian"
+    
+  - name: Step3 - Download (wget) the tomcat packages which are in zip.
+    get_url:
+      url: https://downloads.apache.org/tomcat/tomcat-8/v8.5.64/bin/apache-tomcat-8.5.64.tar.gz
+      dest: /opt   
+
+  - name: Step4 - UnZip the tomcat packages which are downloaded in (/opt)
+    unarchive:
+      src: /opt/apache-tomcat-8.5.64.tar.gz
+      dest: /opt
+      remote_src: yes
+
+  - name: Step5 - Give execution Permission(RWX-startup.sh)
+    file:
+      path: /opt/apache-tomcat-8.5.64/bin/startup.sh
+      mode: 0777
+  
+  - name: Step6 - start tomcat services (startup.sh)
+    shell: nohup ./startup.sh
+    args:
+      chdir: /opt/apache-tomcat-8.5.64/bin

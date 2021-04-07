@@ -1,0 +1,10 @@
+---
+- name: Playbook to create user using variable - external file on all managed nodes
+  hosts: all
+  become: true
+  vars_files:
+    - external_user.yml            
+  tasks:
+  - name: creating user on all managed nodes using vars argument passed        
+    user:
+      name: "{{ user }}"

@@ -1,0 +1,8 @@
+---
+- name: Playbook to create user on all managed nodes
+  hosts: all
+  become: true
+  tasks:
+  - name: creating user on all managed nodes        
+    user:
+      name: kiran

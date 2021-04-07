@@ -1,0 +1,7 @@
+---
+- name: Playbook to install,start  httpd and apache2 service packages and copy index.html on var/www/html on managed nodes
+  hosts: all
+  become: true
+  # gather_facts: no
+  roles: 
+    - setup-apache

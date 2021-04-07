@@ -1,0 +1,17 @@
+---
+- name: Playbook to install apache2 on ubuntu server
+  hosts: dbservers
+  become: true
+  tasks:
+  - name: install apache2
+    apt:
+      name: apache2
+      state: present
+    notify: sajina-start apache2 service
+
+  handlers:  
+  - name: sajina-start apache2 service
+    service:
+      name: apache2
+      state: started
+

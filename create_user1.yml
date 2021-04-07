@@ -1,0 +1,10 @@
+---
+- name: Playbook to create user using variable on all managed nodes
+  hosts: all
+  become: true
+  vars:
+    user: modi      
+  tasks:
+  - name: creating user on all managed nodes using vars argument passed        
+    user:
+      name: "{{ user }}"
